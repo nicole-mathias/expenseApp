@@ -25,6 +25,7 @@
 
         <nav class="navbar navbar-dark bg-dark">
             <span class="navbar-brand mb-0 h1">Xpend</span>
+            <span class="navbar-brand mb-0 h1" id = "headingTotal"> </span>
         </nav>
 
         <div class = "container" style = "min-height : 100vh">
@@ -170,39 +171,7 @@
 
                 headingEl.textContent = someText;
 
-                // show the table here
-                // const data1 = allExpenses[0];
-                // const data2 = allExpenses[1];
-
-                // const data1Text = ` ${data1.amount} ::  ${data1.desc}`;
-                // const data2Text = ` ${data2.amount} ::  ${data2.desc}`;
-
-                // //creating a table
-                // const tableText = `
-                //     <div> ${data1Text} </div>
-                //     <div> ${data2Text} </div>
-                // `
-
-
-                const allExpenseHTML = allExpenses.map(expense => createListItem(expense)
-                    
-                    // return `<div> ${expense.desc} : ${expense.amount} </div>`
-                );
-
-                //the above stuff is alone giving the answer, but we want it to be in one text, also the baove returns an array of string
-
-
-                // use join
-                // here join takes array of strings and returns a string
-                // double inverted quotes in join("") tells that we want to obtain a string, and you leave () blank it will simply do a join using commas
-                const joinedAllExpenseHTML = allExpenseHTML.join("");
-
-                console.log(joinedAllExpenseHTML);
-
-
-                //expenseTableEl.textContent = tableText;
-                expenseTableEl.innerHTML = joinedAllExpenseHTML;
-
+                renderList(allExpenses);
 
 
             }
@@ -230,7 +199,35 @@
             }
 
 
+
+            // Delete Items
+            function deleteItem(dateValue) {
+                const newArr = [];
+                //console.log('delete item was called', dateValue);
+                for(let i = 0; i < allExpenses.length; i++){
+                    if (allExpenses[i].moment.valueOf() !== dateValue){
+                        newArr.push(allExpenses[i]);
+
+                    }
+                    
+                }
+                renderList(newArr);
+            }
+
+
             // view layer
+
+            function renderList(newArr){
+                const allExpenseHTML = newArr .map(expense => createListItem(expense));
+
+                const joinedAllExpenseHTML = allExpenseHTML.join("");
+
+                expenseTableEl.innerHTML = joinedAllExpenseHTML;
+
+            }
+
+
+
             function createListItem({desc, amount, moment }){
                 return `
                 <li class="list-group-item d-flex justify-content-between">
@@ -246,7 +243,11 @@
                             <span class="px-5">
                                 ${amount}
                             </span>
-                            <button type="button" class="btn btn-outline-danger btn-sm">
+                            <button 
+                                type="button" 
+                                class="btn btn-outline-danger btn-sm"
+                                onClick = "deleteItem(${moment.valueOf()})" 
+                            >
 
                                 <i class="fas fa-trash-alt"></i>
                             </button>
